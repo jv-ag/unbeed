@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unbeed - Today's Rates</title>
+    <meta name="description" content="See today's piece rates and hourly rates for farm work. Crowdsourced by workers.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="list-styles.css">
+</head>
+
+<body class="list-page">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🐝</span>
+                <span class="logo-text">unbeed</span>
+            </a>
+            <a href="index.html" class="map-link">🗺️ Map</a>
+        </div>
+    </header>
+
+    <!-- Share Gate (shown to new users) -->
+    <div id="share-gate" class="share-gate">
+        <div class="gate-content">
+            <h2>👋 Share a rate to see all rates</h2>
+            <p>Help other workers by sharing what you know. One rate unlocks the full board.</p>
+            <button class="cta-btn" onclick="showShareForm()">Share a Rate</button>
+            <button class="skip-btn" onclick="skipGate()">Already shared? Continue →</button>
+        </div>
+    </div>
+
+    <!-- Main Content (hidden until gate passed) -->
+    <main id="main-content" class="main-content hidden">
+        <!-- Controls -->
+        <div class="controls">
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Group by</label>
+                    <select id="group-by">
+                        <option value="crop">Crop</option>
+                        <option value="town">Town</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Sort by</label>
+                    <select id="sort-by">
+                        <option value="rate">💰 Rate (high→low)</option>
+                        <option value="spots">👥 Spots available</option>
+                        <option value="fresh">🕐 Most recent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-row">
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="piece">💰 Piece</button>
+                <button class="filter-chip" data-filter="hourly">⏰ Hourly</button>
+            </div>
+        </div>
+
+        <!-- Rates List -->
+        <div id="rates-container">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Floating Share Button -->
+        <button class="fab" onclick="showShareForm()">+ Share Rate</button>
+    </main>
+
+    <!-- Share Form Modal -->
+    <div id="share-modal" class="modal hidden">
+        <div class="modal-content share-modal-content">
+            <button class="modal-close" onclick="closeShareModal()">✕</button>
+            <h3>📝 Share a Rate</h3>
+            <p class="modal-subtitle">What were you offered today?</p>
+
+            <form id="share-form" onsubmit="submitRate(event)">
+                <div class="form-group">
+                    <label>Where?</label>
+                    <select id="share-town" required>
+                        <option value="">Select town...</option>
+                        <option value="Mildura">Mildura</option>
+                        <option value="Robinvale">Robinvale</option>
+                        <option value="Red Cliffs">Red Cliffs</option>
+                        <option value="Renmark">Renmark</option>
+                        <option value="Griffith">Griffith</option>
+                        <option value="Loxton">Loxton</option>
+                        <option value="Waikerie">Waikerie</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>What crop?</label>
+                    <select id="share-crop" required onchange="updateUnits()">
+                        <option value="">Select crop...</option>
+                        <option value="grapes">🍇 Grapes</option>
+                        <option value="cherries">🍒 Cherries</option>
+                        <option value="citrus">🍊 Citrus</option>
+                        <option value="stone fruit">🍑 Stone Fruit</option>
+                        <option value="almonds">🌰 Almonds</option>
+                        <option value="vegetables">🥬 Vegetables</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Pay type?</label>
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-btn active" data-pay="piece"
+                            onclick="setPayType('piece')">💰 Piece rate</button>
+                        <button type="button" class="toggle-btn" data-pay="hourly" onclick="setPayType('hourly')">⏰
+                            Hourly</button>
+                    </div>
+                </div>
+
+                <div id="piece-rate-fields">
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label>Rate</label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">$</span>
+                                <input type="number" id="share-rate" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>Per</label>
+                            <select id="share-unit" required>
+                                <option value="kg">kg</option>
+                                <option value="bin">bin</option>
+                                <option value="lug">lug</option>
+                                <option value="bucket">bucket</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="conversion-preview" class="conversion-preview hidden">
+                        ≈ <span id="converted-rate"></span>/kg for comparison
+                    </div>
+                </div>
+
+                <div id="hourly-rate-fields" class="hidden">
+                    <div class="form-group">
+                        <label>Hourly rate</label>
+                        <div class="input-with-prefix">
+                            <span class="prefix">$</span>
+                            <input type="number" id="share-hourly" step="0.01" min="0">
+                            <span class="suffix">/hr</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Spots available? <span class="optional">(optional)</span></label>
+                    <input type="number" id="share-spots" placeholder="e.g. 20">
+                </div>
+
+                <div class="form-group">
+                    <label>Contractor name? <span class="optional">(optional)</span></label>
+                    <input type="text" id="share-contractor" placeholder="e.g. Agriconnex">
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="share-transport">
+                        Transport provided
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Share & See All Rates</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-content confirm-modal-content">
+            <div class="confirm-icon">✓</div>
+            <h3>Rate shared!</h3>
+            <p>Thanks for helping other workers.</p>
+            <button class="cta-btn" onclick="closeConfirmModal()">See All Rates</button>
+        </div>
+    </div>
+
+    <script src="list-data.js"></script>
+    <script src="list-app.js"></script>
+</body>
+
+</html>

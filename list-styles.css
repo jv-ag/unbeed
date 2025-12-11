@@ -1,0 +1,478 @@
+/* List View Specific Styles */
+
+.list-page {
+    background: var(--bg-dark);
+    min-height: 100vh;
+    padding-top: 60px;
+}
+
+.list-page .header {
+    position: fixed;
+    top: 0;
+}
+
+.map-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.map-link:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+/* Share Gate */
+.share-gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 60px);
+    padding: 20px;
+}
+
+.share-gate.hidden {
+    display: none;
+}
+
+.gate-content {
+    text-align: center;
+    max-width: 360px;
+}
+
+.gate-content h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.gate-content p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.cta-btn {
+    width: 100%;
+    padding: 14px 24px;
+    border: none;
+    background: var(--accent-amber);
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.cta-btn:hover {
+    background: #fbbf24;
+}
+
+.skip-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.skip-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Main Content */
+.main-content {
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding-bottom: 100px;
+}
+
+.main-content.hidden {
+    display: none;
+}
+
+/* Controls */
+.controls {
+    margin-bottom: 20px;
+}
+
+.control-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.control-group {
+    flex: 1;
+}
+
+.control-group label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.control-group select {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filter-row {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-chip {
+    padding: 8px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-chip:hover {
+    border-color: var(--text-secondary);
+}
+
+.filter-chip.active {
+    background: var(--text-primary);
+    color: var(--bg-dark);
+    border-color: var(--text-primary);
+}
+
+/* Rate Groups */
+.rate-group {
+    margin-bottom: 24px;
+}
+
+.group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.group-icon {
+    font-size: 20px;
+}
+
+/* Rate Cards */
+.rate-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+}
+
+.rate-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.rate-main {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.rate-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.rate-value.piece {
+    color: var(--piece-rate);
+}
+
+.rate-value.hourly {
+    color: var(--hourly-rate);
+}
+
+.rate-unit {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.rate-original {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.rate-badge {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.rate-badge.piece {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--piece-rate);
+}
+
+.rate-badge.hourly {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--hourly-rate);
+}
+
+.rate-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.rate-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rate-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color);
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.confirmations {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.confirmations.verified {
+    color: var(--accent-green);
+}
+
+.confirm-btn {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.confirm-btn:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+/* FAB */
+.fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+    color: #000;
+    border: none;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+    transition: all 0.2s;
+}
+
+.fab:hover {
+    transform: scale(1.1);
+}
+
+@media (min-width: 600px) {
+    .fab {
+        width: auto;
+        padding: 0 24px;
+        border-radius: 28px;
+    }
+
+    .fab::after {
+        content: ' Share Rate';
+    }
+}
+
+/* Share Modal */
+.share-modal-content {
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.optional {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-amber);
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.input-with-prefix {
+    display: flex;
+    align-items: center;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.input-with-prefix:focus-within {
+    border-color: var(--accent-amber);
+}
+
+.prefix,
+.suffix {
+    padding: 12px;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.input-with-prefix input {
+    border: none;
+    padding-left: 0;
+    flex: 1;
+}
+
+.input-with-prefix input:focus {
+    outline: none;
+    border: none;
+}
+
+.toggle-group {
+    display: flex;
+    gap: 8px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 12px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toggle-btn.active {
+    background: var(--accent-amber);
+    border-color: var(--accent-amber);
+    color: #000;
+}
+
+.conversion-preview {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--accent-green);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    width: auto;
+}
+
+/* Confirm Modal */
+.confirm-modal-content {
+    text-align: center;
+    padding: 32px 24px;
+}
+
+.confirm-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--accent-green);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 16px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-state h3 {
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}

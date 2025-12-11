@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unbeed - Find Farm Jobs</title>
+    <meta name="description" content="See tomorrow's piece rates and farm jobs on a map. Find the best paying harvest work in Murray-Riverina.">
+    
+    <!-- Mapbox GL JS -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+    
+    <!-- Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🐝</span>
+                <span class="logo-text">unbeed</span>
+            </div>
+            <div class="date-picker">
+                <button class="date-btn" data-offset="0">Today</button>
+                <button class="date-btn active" data-offset="1">Tomorrow</button>
+                <button class="date-btn" data-offset="2">+2 Days</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filters -->
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">All Jobs</button>
+        <button class="filter-btn" data-filter="piece">💰 Piece Rate</button>
+        <button class="filter-btn" data-filter="hourly">⏰ Hourly</button>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Job Panel (slides up when pin clicked) -->
+    <div id="job-panel" class="job-panel hidden">
+        <div class="panel-header">
+            <div class="panel-location">
+                <span class="location-icon">📍</span>
+                <span id="panel-location-name">Farm near Mildura</span>
+            </div>
+            <button class="panel-close" onclick="closePanel()">✕</button>
+        </div>
+        <div class="panel-distance" id="panel-distance">12km away</div>
+        <div id="job-cards-container">
+            <!-- Job cards inserted here -->
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h3>Get Contact Details</h3>
+            <p class="modal-subtitle">Enter your phone to receive contractor details</p>
+            <form id="contact-form" onsubmit="submitContact(event)">
+                <input type="tel" id="phone-input" placeholder="04XX XXX XXX" required pattern="[0-9]{10}">
+                <button type="submit" class="submit-btn">Get Details</button>
+            </form>
+            <div id="contact-result" class="hidden">
+                <p class="success-msg">✓ Contact details:</p>
+                <p id="contractor-phone" class="contractor-phone"></p>
+                <a id="call-link" href="" class="call-btn">📞 Call Now</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
