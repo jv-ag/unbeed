@@ -1,18 +1,5 @@
 /* Unbeed - Farm Jobs Map Styles */
-
-:root {
-    --bg-dark: #0f1419;
-    --bg-card: #1a1f26;
-    --bg-hover: #242b33;
-    --text-primary: #ffffff;
-    --text-secondary: #8b949e;
-    --accent-green: #22c55e;
-    --accent-blue: #3b82f6;
-    --accent-amber: #f59e0b;
-    --border-color: #30363d;
-    --piece-rate: #22c55e;
-    --hourly-rate: #3b82f6;
-}
+/* Variables are now in theme.css */
 
 * {
     margin: 0;
@@ -22,7 +9,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-dark);
+    background: var(--bg-app);
     color: var(--text-primary);
     overflow: hidden;
     height: 100vh;
@@ -36,7 +23,7 @@ body {
     left: 0;
     right: 0;
     z-index: 100;
-    background: linear-gradient(to bottom, rgba(15, 20, 25, 0.95) 0%, rgba(15, 20, 25, 0.8) 100%);
+    background: transparent;
     backdrop-filter: blur(10px);
     padding: 12px 16px;
     border-bottom: 1px solid var(--border-color);
@@ -94,7 +81,7 @@ body {
 }
 
 .date-btn.active {
-    background: var(--accent-amber);
+    background: var(--color-amber);
     color: #000;
 }
 
@@ -127,7 +114,7 @@ body {
 
 .filter-btn.active {
     background: var(--text-primary);
-    color: var(--bg-dark);
+    color: var(--bg-app);
     border-color: var(--text-primary);
 }
 
@@ -164,17 +151,17 @@ body {
 }
 
 .job-marker.piece {
-    background: var(--piece-rate);
+    background: var(--color-piece);
     color: #fff;
 }
 
 .job-marker.hourly {
-    background: var(--hourly-rate);
+    background: var(--color-hourly);
     color: #fff;
 }
 
 .job-marker.mixed {
-    background: linear-gradient(135deg, var(--piece-rate) 50%, var(--hourly-rate) 50%);
+    background: linear-gradient(135deg, var(--color-piece) 50%, var(--color-hourly) 50%);
     color: #fff;
 }
 
@@ -185,7 +172,7 @@ body {
     left: 0;
     right: 0;
     z-index: 200;
-    background: var(--bg-dark);
+    background: var(--bg-app);
     border-radius: 20px 20px 0 0;
     padding: 20px;
     max-height: 70vh;
@@ -285,12 +272,12 @@ body {
 
 .pay-type-badge.piece {
     background: rgba(34, 197, 94, 0.2);
-    color: var(--piece-rate);
+    color: var(--color-piece);
 }
 
 .pay-type-badge.hourly {
     background: rgba(59, 130, 246, 0.2);
-    color: var(--hourly-rate);
+    color: var(--color-hourly);
 }
 
 .job-rate {
@@ -303,11 +290,11 @@ body {
 }
 
 .rate-value.piece {
-    color: var(--piece-rate);
+    color: var(--color-piece);
 }
 
 .rate-value.hourly {
-    color: var(--hourly-rate);
+    color: var(--color-hourly);
 }
 
 .rate-estimate {
@@ -339,7 +326,7 @@ body {
     width: 100%;
     padding: 12px;
     border: none;
-    background: var(--accent-amber);
+    background: var(--color-amber);
     color: #000;
     font-size: 14px;
     font-weight: 600;
@@ -414,7 +401,7 @@ body {
 #phone-input {
     padding: 14px 16px;
     border: 1px solid var(--border-color);
-    background: var(--bg-dark);
+    background: var(--bg-app);
     color: var(--text-primary);
     font-size: 16px;
     border-radius: 8px;
@@ -422,13 +409,13 @@ body {
 
 #phone-input:focus {
     outline: none;
-    border-color: var(--accent-amber);
+    border-color: var(--color-amber);
 }
 
 .submit-btn {
     padding: 14px;
     border: none;
-    background: var(--accent-amber);
+    background: var(--color-amber);
     color: #000;
     font-size: 15px;
     font-weight: 600;
@@ -446,7 +433,7 @@ body {
 }
 
 .success-msg {
-    color: var(--accent-green);
+    color: var(--color-piece);
     font-weight: 500;
     margin-bottom: 8px;
 }
@@ -460,7 +447,7 @@ body {
 .call-btn {
     display: inline-block;
     padding: 12px 24px;
-    background: var(--accent-green);
+    background: var(--color-piece);
     color: #fff;
     text-decoration: none;
     font-weight: 600;
@@ -477,7 +464,7 @@ body {
         border-radius: 16px;
         max-height: calc(100vh - 120px);
     }
-    
+
     .filters {
         top: 80px;
         left: 20px;

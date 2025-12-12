@@ -13,6 +13,7 @@ let userLocation = null;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    checkGate(); // CRITICAL: Enforce gate before showing map
     initMap();
     initDatePicker();
     initFilters();
@@ -28,9 +29,13 @@ function initMap() {
 
     mapboxgl.accessToken = MAPBOX_TOKEN;
 
+    // Detect system theme for map style
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const mapStyle = isDark ? 'mapbox://styles/mapbox/dark-v11' : 'mapbox://styles/mapbox/light-v11';
+
     map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v11',
+        style: mapStyle,
         center: [142.09, -34.24], // Mildura region
         zoom: 7
     });
@@ -100,91 +105,138 @@ function renderJobs() {
     markers.forEach(m => m.remove());
     markers = [];
 
-    // Get jobs for selected date
-    let jobsList = getJobsForDate(selectedDateOffset);
+    // DATA SERVICE INTEGRATION
+    // Get all crowdsourced rates
+    const rates = dataService.getRates();
 
-    // Apply filter
-    if (selectedFilter === 'piece') {
-        jobsList = jobsList.filter(j => j.payType === 'piece');
-    } else if (selectedFilter === 'hourly') {
-        jobsList = jobsList.filter(j => j.payType === 'hourly');
-    }
+    // Group by Town
+    const grouped = {};
+    rates.forEach(rate => {
+        if (!grouped[rate.town]) grouped[rate.town] = [];
+        grouped[rate.town].push(rate);
+    });
 
-    // Group by farm
-    const grouped = groupJobsByFarm(jobsList);
+    // Create markers for each town
+    Object.keys(grouped).forEach(town => {
+        const townRates = grouped[town];
+        const coords = dataService.getTownCoords(town);
 
-    // Create markers for each farm
-    Object.keys(grouped).forEach(farmId => {
-        const farm = getFarm(farmId);
-        const farmJobs = grouped[farmId];
+        if (!coords) return;
 
-        if (!farm) return;
-
-        // Determine marker type based on job types at this farm
-        const hasP = farmJobs.some(j => j.payType === 'piece');
-        const hasH = farmJobs.some(j => j.payType === 'hourly');
+        // Determine marker type
+        const hasP = townRates.some(r => r.payType === 'piece');
+        const hasH = townRates.some(r => r.payType === 'hourly');
         let markerClass = hasP && hasH ? 'mixed' : (hasP ? 'piece' : 'hourly');
 
-        // Total workers needed
-        const totalWorkers = farmJobs.reduce((sum, j) => sum + j.workersNeeded, 0);
+        // Count reports
+        const totalReports = townRates.length;
 
         // Create marker element
         const el = document.createElement('div');
         el.className = `job-marker ${markerClass}`;
-        el.textContent = totalWorkers;
-        el.setAttribute('data-farm-id', farmId);
+        el.textContent = totalReports;
 
-        // Add click handler
+        // Click handler
         el.addEventListener('click', () => {
-            showJobPanel(farmId, farmJobs);
+            showJobPanel(town, townRates);
         });
 
-        // Create Mapbox marker
+        // Add to map
         const marker = new mapboxgl.Marker(el)
-            .setLngLat([farm.approxLng, farm.approxLat])
+            .setLngLat([coords.lng, coords.lat])
             .addTo(map);
 
         markers.push(marker);
+
+        // Jiggle marker if new
+        if (Date.now() - new Date(townRates[0].reportedAt).getTime() < 60000) {
+            el.classList.add('animate-bounce');
+        }
     });
 }
 
-// Show job panel for a farm
-function showJobPanel(farmId, farmJobs) {
-    const farm = getFarm(farmId);
+// Show job panel (now Rate Panel)
+function showJobPanel(town, rates) {
     const panel = document.getElementById('job-panel');
     const container = document.getElementById('job-cards-container');
 
     // Set location name
-    document.getElementById('panel-location-name').textContent = farm.displayName;
+    document.getElementById('panel-location-name').textContent = town;
 
     // Calculate distance
-    const distance = calculateDistance(farm.approxLat, farm.approxLng);
-    document.getElementById('panel-distance').textContent = distance;
+    const coords = dataService.getTownCoords(town);
+    if (coords) {
+        const distance = calculateDistance(coords.lat, coords.lng);
+        document.getElementById('panel-distance').textContent = distance;
+    }
 
-    // Clear and populate job cards
+    // Clear and populate cards
     container.innerHTML = '';
 
-    // Sort: piece rate first, then by rate descending
-    farmJobs.sort((a, b) => {
-        if (a.payType !== b.payType) return a.payType === 'piece' ? -1 : 1;
-        return b.rate - a.rate;
-    });
+    // Sort: most recent first
+    rates.sort((a, b) => new Date(b.reportedAt) - new Date(a.reportedAt));
 
-    farmJobs.forEach(job => {
-        const contractor = getContractor(job.contractorId);
-        const card = createJobCard(job, contractor);
+    rates.forEach(rate => {
+        // Reuse list-app.js Logic?
+        // Ideally we'd share the `createRateCard` function.
+        // For now, I'll inline a simplified version for the map panel
+        const card = createMapRateCard(rate);
         container.appendChild(card);
     });
 
     // Show panel
     panel.classList.remove('hidden');
 
-    // Center map on selected farm
-    map.flyTo({
-        center: [farm.approxLng, farm.approxLat],
-        zoom: 10,
-        duration: 500
-    });
+    // Center map
+    if (coords) {
+        map.flyTo({
+            center: [coords.lng, coords.lat],
+            zoom: 10,
+            duration: 500
+        });
+    }
+}
+
+function createMapRateCard(rate) {
+    const card = document.createElement('div');
+    card.className = 'job-card'; // Reuse styles
+
+    // Logic to format rate
+    const isPiece = rate.payType === 'piece';
+    const rateDisplay = isPiece
+        ? `$${rate.ratePerKg.toFixed(2)}/kg`
+        : `$${rate.originalRate.toFixed(2)}/hr`;
+
+    const emoji = {
+        'grapes': '🍇',
+        'citrus': '🍊',
+        'stone fruit': '🍑',
+        'almonds': '🌰',
+        'vegetables': '🥬',
+        'cherries': '🍒'
+    }[rate.crop] || '🌱';
+
+    card.innerHTML = `
+        <div class="job-card-header">
+            <div class="job-crop">
+                <span class="crop-icon">${emoji}</span>
+                <div class="crop-info">
+                    <h4>${rate.crop.charAt(0).toUpperCase() + rate.crop.slice(1)}</h4>
+                    <span class="pay-type-badge ${rate.payType}">${rate.payType}</span>
+                </div>
+            </div>
+            <div class="job-rate">
+                <div class="rate-value ${rate.payType}">${rateDisplay}</div>
+                <div class="rate-estimate">${isPiece ? 'Confirmed rate' : 'Hourly rate'}</div>
+            </div>
+        </div>
+        <div class="job-meta">
+            <span>🕐 ${new Date(rate.reportedAt).toLocaleDateString()}</span>
+            <span>✅ ${rate.confirmations} confirmed</span>
+            ${rate.transport ? '<span>🚐 Transport</span>' : ''}
+        </div>
+    `;
+    return card;
 }
 
 // Create a job card element
@@ -290,6 +342,49 @@ function toRad(deg) {
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Gate functions (unified across all views)
+function checkGate() {
+    const gate = document.getElementById('share-gate');
+    const mapEl = document.getElementById('map');
+
+    if (!gate || !mapEl) {
+        console.error('Gate or map element not found');
+        return;
+    }
+
+    if (hasUserShared()) {
+        passGate();
+    } else {
+        // Show gate, hide map
+        gate.classList.remove('hidden');
+        mapEl.style.display = 'none';
+    }
+}
+
+function passGate() {
+    const gate = document.getElementById('share-gate');
+    const mapEl = document.getElementById('map');
+
+    if (gate) gate.classList.add('hidden');
+    if (mapEl) mapEl.style.display = 'block';
+}
+
+function skipGate() {
+    // For MVP testing
+    localStorage.setItem('unbeed_user_shared', 'true');
+    passGate();
+}
+
+function playGateAudio() {
+    // TTS using Web Speech API
+    const msg = new SpeechSynthesisUtterance("Share a rate. Then see what everyone else shared.");
+    window.speechSynthesis.speak(msg);
+}
+
+function hasUserShared() {
+    return localStorage.getItem('unbeed_user_shared') === 'true';
 }
 
 // Close modal on outside click

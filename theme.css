@@ -1,0 +1,445 @@
+/* Unbeed Design System - Hybrid Adaptive Theme */
+
+:root {
+    /* Base Hues */
+    --hue-green: 142;
+    --hue-blue: 217;
+    --hue-amber: 45;
+
+    /* Common Colors */
+    --color-piece: hsl(var(--hue-green), 70%, 45%);
+    --color-hourly: hsl(var(--hue-blue), 90%, 60%);
+    --color-amber: hsl(var(--hue-amber), 90%, 50%);
+
+    /* Light Mode (Default/Day) */
+    --bg-app: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-nav: rgba(255, 255, 255, 0.9);
+    --bg-hover: #f9fafb;
+
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-inverse: #ffffff;
+
+    --border-color: #e5e7eb;
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-nav: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    /* Status Config */
+    --badge-piece-bg: rgba(34, 197, 94, 0.1);
+    --badge-hourly-bg: rgba(59, 130, 246, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark Mode (Night/OLED) */
+        --bg-app: #0f1419;
+        --bg-card: #1a1f26;
+        --bg-nav: rgba(26, 31, 38, 0.9);
+        --bg-hover: #242b33;
+
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --text-inverse: #000000;
+
+        --border-color: #30363d;
+        --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+        --shadow-nav: 0 -4px 20px rgba(0, 0, 0, 0.4);
+
+        /* Adjust colors for dark brightness */
+        --color-piece: hsl(var(--hue-green), 70%, 50%);
+        --color-hourly: hsl(var(--hue-blue), 80%, 60%);
+    }
+}
+
+/* Global Reset & Typography */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding-bottom: 80px;
+    /* Space for Bottom Nav */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Shared Components */
+
+/* 1. Verified Button Style (Primary Action) */
+.btn-primary {
+    background: var(--color-amber);
+    color: #000;
+    border: none;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.1s;
+}
+
+.btn-primary:active {
+    transform: scale(0.96);
+}
+
+/* 2. Badge Styles */
+.badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge.piece {
+    background-color: var(--badge-piece-bg);
+    color: var(--color-piece);
+}
+
+.badge.hourly {
+    background-color: var(--badge-hourly-bg);
+    color: var(--color-hourly);
+}
+
+/* 3. Bottom Navigation (New) */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--bg-nav);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    z-index: 1000;
+    box-shadow: var(--shadow-nav);
+}
+
+/* Immersive Nav (Deck Only - Mobile & Desktop) */
+.deck-page .bottom-nav {
+    transform: translateY(100%);
+    /* Hidden by default */
+    transition: transform 0.3s ease;
+}
+
+.deck-page .bottom-nav.nav-visible {
+    transform: translateY(0);
+    /* Slide up */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    color: var(--text-secondary);
+    text-decoration: none;
+    gap: 4px;
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: var(--text-primary);
+}
+
+.nav-icon {
+    font-size: 24px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* FAB for Map/List Switching (Alternative to Bottom Nav if we want to float) */
+/* But strictly following plan: "Unified Bottom Navigation" */
+
+/* 4. Form Elements Polish */
+.form-input,
+select {
+    appearance: none;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 16px;
+    color: var(--text-primary);
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-image: none;
+    /* Remove default arrow */
+}
+
+/* Custom Select Arrow */
+.select-wrapper {
+    position: relative;
+    display: block;
+}
+
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-secondary);
+    border-bottom: 2px solid var(--text-secondary);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+}
+
+select:focus,
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-amber);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* 5. Button Refinement */
+button,
+.btn {
+    font-family: inherit;
+}
+
+.filter-chip {
+    border-radius: 999px;
+    /* Pills */
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+/* 6. Map Controls (Glassy Ghost) */
+.mapboxgl-ctrl-group {
+    background-color: var(--bg-nav) !important;
+    /* Glassy background */
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-card) !important;
+    overflow: hidden !important;
+    opacity: 0.85;
+    /* Ghost: slightly transparent by default */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+
+    /* Mobile: Clear Bottom Nav (64px + 16px buffer) */
+    margin-bottom: 80px !important;
+    margin-right: 16px !important;
+}
+
+.mapboxgl-ctrl-group:hover,
+.mapboxgl-ctrl-group:active {
+    opacity: 1;
+    /* Solid on interaction */
+    transform: scale(1.02);
+}
+
+.mapboxgl-ctrl button {
+    width: 44px !important;
+    /* Larger tap target */
+    height: 44px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    background-color: transparent !important;
+}
+
+.mapboxgl-ctrl button:last-child {
+    border-bottom: none !important;
+}
+
+/* Icon colors */
+.mapboxgl-ctrl-icon {
+    filter: invert(0.3) !important;
+    /* Darken icons slightly */
+}
+
+@media (prefers-color-scheme: dark) {
+    .mapboxgl-ctrl-icon {
+        filter: invert(0.9) !important;
+        /* Lighten icons for dark mode */
+    }
+}
+
+/* 7. Floating Glass Header Elements */
+.header-transparent {
+    background: transparent !important;
+    border-bottom: none !important;
+    padding: 16px !important;
+    pointer-events: none;
+    /* Let clicks pass through empty space */
+}
+
+.header-content {
+    display: flex;
+    /* Fix lint error: was empty */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.smart-chips-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scroll on iOS */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+}
+
+.smart-chips-container::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
+}
+
+.filter-chip {
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.filter-chip.active {
+    background: var(--text-primary);
+    color: var(--bg-app);
+    border-color: var(--text-primary);
+    font-weight: 600;
+}
+
+.glass-pill {
+    background: var(--bg-nav);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: var(--shadow-card);
+    pointer-events: auto;
+    /* Re-enable clicks on the pills */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.btn-share-pill {
+    background: var(--color-amber);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: var(--shadow-card);
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-share-pill:hover {
+    transform: scale(1.05);
+}
+
+/* Default: Hide Desktop Nav on Mobile */
+.desktop-nav {
+    display: none;
+}
+
+/* Smart Bottom Nav (Deck Page) */
+.deck-page .bottom-nav {
+    transform: translateY(100%);
+    /* Hidden by default */
+    transition: transform 0.3s ease;
+}
+
+.deck-page .bottom-nav.nav-visible {
+    transform: translateY(0);
+    /* Slide up */
+}
+
+/* 8. Desktop Adaptation */
+@media (min-width: 768px) {
+
+    /* Map & List: Hide Bottom Nav on Desktop (Use Top Nav) */
+    .bottom-nav {
+        display: none;
+    }
+
+    /* Deck: Allow Bottom Nav (Smart) */
+    .deck-page .bottom-nav {
+        display: flex;
+    }
+
+    /* Adjust Body Padding */
+    body {
+        padding-bottom: 0;
+    }
+
+    /* Show "Desktop Nav" in Header */
+    .header-content {
+        max-width: 1024px;
+        margin: 0 auto;
+    }
+
+    /* Desktop Navigation (Center Pill) */
+    .desktop-nav {
+        display: flex;
+        /* Flex on desktop */
+        gap: 20px;
+        padding: 8px 24px;
+        /* Slightly wider */
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 14px;
+        transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--text-primary);
+    }
+
+    /* Map Controls - Vertical Stack on Right */
+    .mapboxgl-ctrl-group {
+        margin-right: 24px !important;
+        /* Keep mobile margin-bottom (80px) from base rule */
+    }
+
+    /* Filters / Chips - Desktop Horizontal */
+    .smart-chips-container {
+        justify-content: center;
+        /* Center chips on desktop */
+        max-width: 800px;
+        margin: 0 auto 20px;
+        overflow-x: visible;
+        /* No scroll needed usually */
+        flex-wrap: wrap;
+        /* Wrap if needed */
+    }
+}

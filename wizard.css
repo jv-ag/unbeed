@@ -1,0 +1,238 @@
+/* Wizard Overlay */
+.wizard-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-app);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    animation: slideUp 0.3s ease-out;
+}
+
+.wizard-overlay.hidden {
+    display: none;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.wizard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.wizard-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.progress-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 50%;
+}
+
+.dot.active {
+    background: var(--color-amber);
+}
+
+/* Step Content */
+.wizard-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    overflow-y: auto;
+    /* Allow scroll if content is tall */
+    padding-bottom: 20px;
+    /* Space for bottom interaction */
+    width: 100%;
+    max-width: 480px;
+    /* Desktop Constraint */
+    margin: 0 auto;
+    /* Center on desktop */
+}
+
+.step-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 32px;
+}
+
+/* Grid Layouts */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Big Buttons */
+.wiz-btn {
+    aspect-ratio: 1;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s, border-color 0.2s;
+    box-shadow: var(--shadow-card);
+}
+
+.wiz-btn:active {
+    transform: scale(0.96);
+}
+
+.wiz-btn.selected {
+    border-color: var(--color-piece);
+    background: #f0fdf4;
+    /* Light green */
+}
+
+.wiz-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.wiz-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Input Specific */
+.wiz-input-group {
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+.wiz-input {
+    width: 100%;
+    font-size: 48px;
+    text-align: center;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    background: transparent;
+    padding: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    /* Fix for dark mode visibility */
+}
+
+.wiz-input:focus {
+    outline: none;
+    border-color: var(--color-amber);
+}
+
+/* Navigation */
+.wizard-nav {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.next-btn {
+    background: var(--text-primary);
+    color: var(--bg-app);
+    border: none;
+    padding: 16px 32px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.next-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Rate Slider */
+.rate-slider-container {
+    width: 100%;
+}
+
+.rate-display {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.typical-range-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.rate-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(to right,
+            var(--border-color) 0%,
+            var(--color-piece) 30%,
+            var(--color-piece) 70%,
+            var(--border-color) 100%);
+    border-radius: 4px;
+    outline: none;
+    margin: 24px 0;
+}
+
+.rate-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-piece);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.rate-slider::-moz-range-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-piece);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
